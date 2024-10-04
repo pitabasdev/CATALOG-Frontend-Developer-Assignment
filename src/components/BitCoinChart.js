@@ -1,30 +1,105 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, ButtonGroup, Button } from "react-bootstrap";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import FullscreenIcon from "@mui/icons-material/Fullscreen";
+import CompareIcon from "@mui/icons-material/Compare";
 
 export default function BitCoinChart() {
-  const [activeTab, setActiveTab] = useState("Chart"); 
-  const [activeButton, setActiveButton] = useState(null); 
+  const [activeTab, setActiveTab] = useState("Chart"); // Tracks the active tab
+  const [activeButton, setActiveButton] = useState(null);
+  const [chartData, setChartData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch data from API (for Chart tab)
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(
+          "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=7"
+        );
+        const data = await response.json();
+
+        const prices = data.prices.map((item) => ({
+          time: new Date(item[0]).toLocaleDateString(),
+          value: item[1],
+        }));
+
+        setChartData(prices);
+      } catch (error) {
+        console.error("Error fetching chart data", error);
+      }
+      setLoading(false);
+    };
+
+    if (activeTab === "Chart") {
+      fetchData();
+    }
+  }, [activeTab]); // Fetch data only when the "Chart" tab is active
+
+  // Render the chart or alternative content based on the active tab
+  const renderContent = () => {
+    switch (activeTab) {
+      case "Chart":
+        return (
+          <div className="chart-container">
+            {loading ? (
+              <p>Loading chart...</p>
+            ) : (
+              <ResponsiveContainer width="100%" height={400}>
+                <LineChart data={chartData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="time" />
+                  <YAxis />
+                  <Tooltip />
+                  <Line
+                    type="monotone"
+                    dataKey="value"
+                    stroke="#8884d8"
+                    strokeWidth={2}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            )}
+          </div>
+        );
+      case "Statistics":
+        return <p>Statistics Content Here</p>; // You can replace this with real stats or graph
+      case "Analysis":
+        return <p>Analysis Content Here</p>; // You can add your analysis data or charts here
+      default:
+        return null;
+    }
+  };
 
   const tabs = ["Summary", "Chart", "Statistics", "Analysis", "Settings"];
 
   const handleClick = (button) => {
-    setActiveButton(button); 
+    setActiveButton(button);
   };
 
   const getButtonStyles = (button) => {
     return {
-      color: activeButton === button ? "#ffffff" : "#6c757d", 
+      color: activeButton === button ? "#ffffff" : "#6c757d",
       textDecoration: "none",
       padding: "0.5rem 1rem",
-      fontWeight: activeButton === button ? "bold" : "normal", 
-      backgroundColor: activeButton === button ? "#4C6FFF" : "transparent", 
-      borderRadius: activeButton === button ? "5px" : "0", 
+      fontWeight: activeButton === button ? "bold" : "normal",
+      backgroundColor: activeButton === button ? "#4C6FFF" : "transparent",
+      borderRadius: activeButton === button ? "5px" : "0",
     };
   };
+
   return (
     <div>
       <div>
-        {" "}
         <Container className="mt-4">
           <Row className="mb-4">
             <Col md={10} className="text-left">
@@ -71,6 +146,7 @@ export default function BitCoinChart() {
               </ButtonGroup>
             </Col>
           </Row>
+
           <Row>
             <Col md={11}>
               <hr
@@ -82,6 +158,7 @@ export default function BitCoinChart() {
               ></hr>
             </Col>
           </Row>
+
           <Row className="ml-5 mt-4">
             <Col md={10} className="text-center">
               <ButtonGroup>
@@ -137,19 +214,17 @@ export default function BitCoinChart() {
               </ButtonGroup>
             </Col>
           </Row>
+
           <Row className="justify-content-center">
             <Col
               md={10}
               className="border rounded p-4"
               style={{ backgroundColor: "#f8f9fa" }}
             >
-              <div className="chart-placeholder" style={{ height: "250px" }}>
-                <p className="text-muted text-center">
-                  Chart will be displayed here
-                </p>
-              </div>
+              {renderContent()}
             </Col>
           </Row>
+
           <Row className="justify-content-between mt-4">
             <Col className="text-left">
               <h5 className="font-weight-bold" style={{ color: "#1e1e1e" }}>
