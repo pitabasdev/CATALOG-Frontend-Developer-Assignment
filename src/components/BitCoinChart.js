@@ -54,8 +54,6 @@ export default function BitCoinChart() {
           currentPrice: summary.bitcoin.usd,
           change: summary.bitcoin.usd_24h_change.toFixed(2),
         });
-
-        // Mockup statistics data
         const highestPrice = Math.max(...prices.map((p) => p.value));
         const lowestPrice = Math.min(...prices.map((p) => p.value));
         const averagePrice = (
@@ -72,8 +70,6 @@ export default function BitCoinChart() {
         const priceVolatility = (
           (highestPrice - lowestPrice) / lowestPrice
         ).toFixed(2);
-
-        // Simple Moving Average (SMA) for the last 5 prices
         const smaPeriod = 5;
         const sma = prices
           .slice(-smaPeriod)
@@ -81,7 +77,7 @@ export default function BitCoinChart() {
           .toFixed(2);
 
         setAnalysisData({
-          priceVolatility: priceVolatility * 100, // Convert to percentage
+          priceVolatility: priceVolatility * 100, 
           sma,
         });
       } catch (error) {
