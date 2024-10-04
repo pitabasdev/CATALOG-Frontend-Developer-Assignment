@@ -24,6 +24,7 @@ export default function BitCoinChart() {
   const [activeButton, setActiveButton] = useState("1w");
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [summaryData, setSummaryData] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,19 +41,46 @@ export default function BitCoinChart() {
         }));
 
         setChartData(prices);
+        const summaryResponse = await fetch(
+          "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true"
+        );
+        const summary = await summaryResponse.json();
+
+        setSummaryData({
+          currentPrice: summary.bitcoin.usd,
+          change: summary.bitcoin.usd_24h_change.toFixed(2),
+        });
       } catch (error) {
-        console.error("Error fetching chart data", error);
+        console.error("Error fetching chart or summary data", error);
       }
       setLoading(false);
     };
 
-    if (activeTab === "Chart") {
+    if (activeTab === "Chart" || activeTab === "Summary") {
       fetchData();
     }
   }, [activeTab, activeButton]);
-
   const renderContent = () => {
     switch (activeTab) {
+      case "Summary":
+        return (
+          <div className="summary-container">
+            <h2>Bitcoin Summary</h2>
+            <p>
+              <strong>Current Price: </strong>${summaryData.currentPrice}
+            </p>
+            <p
+              style={{
+                color: summaryData.change > 0 ? "#32C48D" : "#E53E3E",
+                fontWeight: "bold",
+              }}
+            >
+              <strong>24h Change: </strong>
+              {summaryData.change > 0 ? "+" : ""}
+              {summaryData.change}%
+            </p>
+          </div>
+        );
       case "Chart":
         return (
           <div className="chart-container">
@@ -86,6 +114,11 @@ export default function BitCoinChart() {
   };
 
   const tabs = ["Summary", "Chart", "Statistics", "Analysis", "Settings"];
+
+  const handleClick = (button) => {
+    setActiveButton(button);
+  };
+
   const getButtonStyles = (button) => {
     return {
       color: activeButton === button ? "#ffffff" : "#6c757d",
@@ -96,6 +129,7 @@ export default function BitCoinChart() {
       borderRadius: activeButton === button ? "5px" : "0",
     };
   };
+
   return (
     <div>
       <div>
@@ -106,21 +140,22 @@ export default function BitCoinChart() {
                 className="display-6"
                 style={{ fontWeight: "bold", color: "#1e1e1e" }}
               >
-                63,179.71 <sup style={{ color: "#D3D3D3" }}>USD</sup>
+                {summaryData.currentPrice}{" "}
+                <sup style={{ color: "#D3D3D3" }}>USD</sup>
               </h1>
               <p
                 style={{
                   fontSize: "18px",
-                  color: "#32C48D",
+                  color: summaryData.change > 0 ? "#32C48D" : "#E53E3E",
                   fontWeight: "bold",
                 }}
               >
-                +2,161.42 (3.54%)
+                {summaryData.change > 0 ? "+" : ""}
+                {summaryData.change}% (24h)
               </p>
             </Col>
           </Row>
 
-          {/* Tab Navigation */}
           <Row className="mb-2">
             <Col md={5}>
               <ButtonGroup className="w-100 tab-buttons">
@@ -132,6 +167,7 @@ export default function BitCoinChart() {
                     style={{
                       fontSize: "16px",
                       textDecoration: "none",
+                      width: "30px",
                       color: activeTab === tab ? "#1e1e1e" : "#6c757d",
                       fontWeight: activeTab === tab ? "bold" : "normal",
                       borderBottom:
@@ -158,25 +194,62 @@ export default function BitCoinChart() {
             </Col>
           </Row>
 
-          {/* Time-frame buttons */}
           <Row className="ml-5 mt-4 mb-2">
             <Col md={10} className="text-center">
               <ButtonGroup>
-                {Object.keys(timeframes).map((time) => (
-                  <Button
-                    key={time}
-                    variant="link"
-                    style={getButtonStyles(time)}
-                    onClick={() => setActiveButton(time)}
-                  >
-                    {time}
-                  </Button>
-                ))}
+                <Button
+                  variant="link"
+                  style={getButtonStyles("1d")}
+                  onClick={() => handleClick("1d")}
+                >
+                  1d
+                </Button>
+                <Button
+                  variant="link"
+                  style={getButtonStyles("3d")}
+                  onClick={() => handleClick("3d")}
+                >
+                  3d
+                </Button>
+                <Button
+                  variant="link"
+                  style={getButtonStyles("1w")}
+                  onClick={() => handleClick("1w")}
+                >
+                  1w
+                </Button>
+                <Button
+                  variant="link"
+                  style={getButtonStyles("1m")}
+                  onClick={() => handleClick("1m")}
+                >
+                  1m
+                </Button>
+                <Button
+                  variant="link"
+                  style={getButtonStyles("6m")}
+                  onClick={() => handleClick("6m")}
+                >
+                  6m
+                </Button>
+                <Button
+                  variant="link"
+                  style={getButtonStyles("1y")}
+                  onClick={() => handleClick("1y")}
+                >
+                  1y
+                </Button>
+                <Button
+                  variant="link"
+                  style={getButtonStyles("max")}
+                  onClick={() => handleClick("max")}
+                >
+                  max
+                </Button>
               </ButtonGroup>
             </Col>
           </Row>
 
-          {/* Chart/Content */}
           <Row className="justify-content-center">
             <Col
               md={10}
