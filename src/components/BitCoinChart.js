@@ -9,6 +9,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+
 const timeframes = {
   "1d": 1,
   "3d": 3,
@@ -25,6 +26,7 @@ export default function BitCoinChart() {
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [summaryData, setSummaryData] = useState({});
+  const [statisticsData, setStatisticsData] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,6 +43,7 @@ export default function BitCoinChart() {
         }));
 
         setChartData(prices);
+
         const summaryResponse = await fetch(
           "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true"
         );
@@ -50,16 +53,26 @@ export default function BitCoinChart() {
           currentPrice: summary.bitcoin.usd,
           change: summary.bitcoin.usd_24h_change.toFixed(2),
         });
+
+        // Mockup statistics data
+        setStatisticsData({
+          highestPrice: Math.max(...prices.map((p) => p.value)),
+          lowestPrice: Math.min(...prices.map((p) => p.value)),
+          averagePrice: (
+            prices.reduce((acc, p) => acc + p.value, 0) / prices.length
+          ).toFixed(2),
+        });
       } catch (error) {
         console.error("Error fetching chart or summary data", error);
       }
       setLoading(false);
     };
 
-    if (activeTab === "Chart" || activeTab === "Summary") {
+    if (activeTab === "Chart" || activeTab === "Summary" || activeTab === "Statistics") {
       fetchData();
     }
   }, [activeTab, activeButton]);
+
   const renderContent = () => {
     switch (activeTab) {
       case "Summary":
@@ -105,7 +118,26 @@ export default function BitCoinChart() {
           </div>
         );
       case "Statistics":
-        return <p>Statistics Content Here</p>;
+        return (
+          <div className="statistics-container">
+            <h2>Bitcoin Statistics</h2>
+            {loading ? (
+              <p>Loading statistics...</p>
+            ) : (
+              <div>
+                <p>
+                  <strong>Highest Price: </strong>${statisticsData.highestPrice}
+                </p>
+                <p>
+                  <strong>Lowest Price: </strong>${statisticsData.lowestPrice}
+                </p>
+                <p>
+                  <strong>Average Price: </strong>${statisticsData.averagePrice}
+                </p>
+              </div>
+            )}
+          </div>
+        );
       case "Analysis":
         return <p>Analysis Content Here</p>;
       default:
