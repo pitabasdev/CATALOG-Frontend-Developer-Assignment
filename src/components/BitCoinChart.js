@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import { Container, Row, Col, ButtonGroup, Button } from "react-bootstrap";
 
 export default function BitCoinChart() {
@@ -34,12 +34,12 @@ export default function BitCoinChart() {
                     className="text-muted"
                     style={{
                       fontSize: "16px",
-                      textDecoration:'none',
-                      width:"30px",
+                      textDecoration: "none",
+                      width: "30px",
                       color: activeTab === tab ? "#1e1e1e" : "#6c757d",
                       fontWeight: activeTab === tab ? "bold" : "normal",
                       borderBottom:
-                        activeTab === tab ? "2px solid #4C6FFF" : "none", 
+                        activeTab === tab ? "3px solid #4C6FFF" : "none",
                     }}
                     onClick={() => setActiveTab(tab)}
                   >
@@ -49,25 +49,90 @@ export default function BitCoinChart() {
               </ButtonGroup>
             </Col>
           </Row>
-
-          <Row className="justify-content-center mb-4">
-            <Col md={8} className="text-center">
-              <ButtonGroup>
-                <Button variant="outline-secondary">1d</Button>
-                <Button variant="outline-secondary">3d</Button>
-                <Button
-                  variant="primary"
-                  style={{ backgroundColor: "#4C6FFF", borderColor: "#4C6FFF" }}
-                >
-                  1w
-                </Button>
-                <Button variant="outline-secondary">1m</Button>
-                <Button variant="outline-secondary">6m</Button>
-                <Button variant="outline-secondary">1y</Button>
-                <Button variant="outline-secondary">max</Button>
-              </ButtonGroup>
+          <Row>
+            <Col md={11}>
+              <hr
+                style={{ marginTop: "-9px", backgroundColor: "#E0FFFF",marginLeft:"5px" }}
+              ></hr>
             </Col>
           </Row>
+          <Row className="ml-5 mt-4">
+      <Col md={10} className="text-center">
+        <ButtonGroup>
+          <Button
+            variant="link"
+            style={{
+              color: "#6c757d",
+              textDecoration: "none",
+              padding: "0.5rem 1.5rem",
+            }}
+          >
+            1d
+          </Button>
+          <Button
+            variant="link"
+            style={{
+              color: "#6c757d",
+              textDecoration: "none",
+              padding: "0.5rem 1.5rem",
+            }}
+          >
+            3d
+          </Button>
+          <Button
+            variant="link"
+            style={{
+              color: "#4C6FFF",
+              textDecoration: "none",
+              padding: "0.5rem 1.5rem",
+              fontWeight: "bold",
+            }}
+          >
+            1w
+          </Button>
+          <Button
+            variant="link"
+            style={{
+              color: "#6c757d",
+              textDecoration: "none",
+              padding: "0.5rem 1.5rem",
+            }}
+          >
+            1m
+          </Button>
+          <Button
+            variant="link"
+            style={{
+              color: "#6c757d",
+              textDecoration: "none",
+              padding: "0.5rem 1.5rem",
+            }}
+          >
+            6m
+          </Button>
+          <Button
+            variant="link"
+            style={{
+              color: "#6c757d",
+              textDecoration: "none",
+              padding: "0.5rem 1.5rem",
+            }}
+          >
+            1y
+          </Button>
+          <Button
+            variant="link"
+            style={{
+              color: "#6c757d",
+              textDecoration: "none",
+              padding: "0.5rem 1.5rem",
+            }}
+          >
+            max
+          </Button>
+        </ButtonGroup>
+      </Col>
+    </Row>
           <Row className="justify-content-center">
             <Col
               md={10}
