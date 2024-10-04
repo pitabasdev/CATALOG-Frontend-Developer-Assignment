@@ -12,11 +12,14 @@
 // import CompareIcon from "@mui/icons-material/Compare";
 // import axios from "axios";
 import "./App.css";
+import BitCoinChart from "./components/BitCoinChart";
 
 function App() {
-  return <div>
-    
-  </div>;
+  return (
+    <div>
+      <BitCoinChart />
+    </div>
+  );
 }
 
 export default App;
