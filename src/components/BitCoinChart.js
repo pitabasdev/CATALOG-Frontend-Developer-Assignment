@@ -9,23 +9,21 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-
+const timeframes = {
+  "1d": 1,
+  "3d": 3,
+  "1w": 7,
+  "1m": 30,
+  "6m": 180,
+  "1y": 365,
+  max: "max",
+};
 
 export default function BitCoinChart() {
-  const [activeTab, setActiveTab] = useState("Chart"); 
-  const [activeButton, setActiveButton] = useState("1w"); 
+  const [activeTab, setActiveTab] = useState("Chart");
+  const [activeButton, setActiveButton] = useState("1w");
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const timeframes = {
-    "1d": 1,
-    "3d": 3,
-    "1w": 7,
-    "1m": 30,
-    "6m": 180,
-    "1y": 365,
-    "max": "max",
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,7 +49,7 @@ export default function BitCoinChart() {
     if (activeTab === "Chart") {
       fetchData();
     }
-  }, [activeTab, activeButton]); 
+  }, [activeTab, activeButton]);
 
   const renderContent = () => {
     switch (activeTab) {
@@ -87,10 +85,7 @@ export default function BitCoinChart() {
     }
   };
 
-  // Tab buttons (Summary, Chart, etc.)
   const tabs = ["Summary", "Chart", "Statistics", "Analysis", "Settings"];
-
-  // Button style logic for time-frame buttons
   const getButtonStyles = (button) => {
     return {
       color: activeButton === button ? "#ffffff" : "#6c757d",
@@ -101,7 +96,6 @@ export default function BitCoinChart() {
       borderRadius: activeButton === button ? "5px" : "0",
     };
   };
-
   return (
     <div>
       <div>
