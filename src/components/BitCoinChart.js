@@ -9,22 +9,30 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-// import FullscreenIcon from "@mui/icons-material/Fullscreen";
-// import CompareIcon from "@mui/icons-material/Compare";
-import "./ButtonGroup"
+
 
 export default function BitCoinChart() {
-  const [activeTab, setActiveTab] = useState("Chart"); // Tracks the active tab
-  const [activeButton, setActiveButton] = useState(null);
+  const [activeTab, setActiveTab] = useState("Chart"); 
+  const [activeButton, setActiveButton] = useState("1w"); 
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const timeframes = {
+    "1d": 1,
+    "3d": 3,
+    "1w": 7,
+    "1m": 30,
+    "6m": 180,
+    "1y": 365,
+    "max": "max",
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
         const response = await fetch(
-          "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=7"
+          `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=${timeframes[activeButton]}`
         );
         const data = await response.json();
 
@@ -43,7 +51,7 @@ export default function BitCoinChart() {
     if (activeTab === "Chart") {
       fetchData();
     }
-  }, [activeTab]);
+  }, [activeTab, activeButton]); 
 
   const renderContent = () => {
     switch (activeTab) {
@@ -79,12 +87,10 @@ export default function BitCoinChart() {
     }
   };
 
+  // Tab buttons (Summary, Chart, etc.)
   const tabs = ["Summary", "Chart", "Statistics", "Analysis", "Settings"];
 
-  const handleClick = (button) => {
-    setActiveButton(button);
-  };
-
+  // Button style logic for time-frame buttons
   const getButtonStyles = (button) => {
     return {
       color: activeButton === button ? "#ffffff" : "#6c757d",
@@ -120,6 +126,7 @@ export default function BitCoinChart() {
             </Col>
           </Row>
 
+          {/* Tab Navigation */}
           <Row className="mb-2">
             <Col md={5}>
               <ButtonGroup className="w-100 tab-buttons">
@@ -131,7 +138,6 @@ export default function BitCoinChart() {
                     style={{
                       fontSize: "16px",
                       textDecoration: "none",
-                      width: "30px",
                       color: activeTab === tab ? "#1e1e1e" : "#6c757d",
                       fontWeight: activeTab === tab ? "bold" : "normal",
                       borderBottom:
@@ -158,62 +164,25 @@ export default function BitCoinChart() {
             </Col>
           </Row>
 
+          {/* Time-frame buttons */}
           <Row className="ml-5 mt-4 mb-2">
             <Col md={10} className="text-center">
               <ButtonGroup>
-                <Button
-                  variant="link"
-                  style={getButtonStyles("1d")}
-                  onClick={() => handleClick("1d")}
-                >
-                  1d
-                </Button>
-                <Button
-                  variant="link"
-                  style={getButtonStyles("3d")}
-                  onClick={() => handleClick("3d")}
-                >
-                  3d
-                </Button>
-                <Button
-                  variant="link"
-                  style={getButtonStyles("1w")}
-                  onClick={() => handleClick("1w")}
-                >
-                  1w
-                </Button>
-                <Button
-                  variant="link"
-                  style={getButtonStyles("1m")}
-                  onClick={() => handleClick("1m")}
-                >
-                  1m
-                </Button>
-                <Button
-                  variant="link"
-                  style={getButtonStyles("6m")}
-                  onClick={() => handleClick("6m")}
-                >
-                  6m
-                </Button>
-                <Button
-                  variant="link"
-                  style={getButtonStyles("1y")}
-                  onClick={() => handleClick("1y")}
-                >
-                  1y
-                </Button>
-                <Button
-                  variant="link"
-                  style={getButtonStyles("max")}
-                  onClick={() => handleClick("max")}
-                >
-                  max
-                </Button>
+                {Object.keys(timeframes).map((time) => (
+                  <Button
+                    key={time}
+                    variant="link"
+                    style={getButtonStyles(time)}
+                    onClick={() => setActiveButton(time)}
+                  >
+                    {time}
+                  </Button>
+                ))}
               </ButtonGroup>
             </Col>
           </Row>
 
+          {/* Chart/Content */}
           <Row className="justify-content-center">
             <Col
               md={10}
