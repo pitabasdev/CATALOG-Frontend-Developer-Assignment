@@ -66,7 +66,6 @@ export default function BitCoinChart() {
           averagePrice,
         });
 
-        // Analysis Metrics
         const priceVolatility = (
           (highestPrice - lowestPrice) / lowestPrice
         ).toFixed(2);
