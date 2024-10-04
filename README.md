@@ -11,8 +11,8 @@ This project is a **React.js** based application that displays **Bitcoin** price
 
 ## 🎥 Demo
 
-![Bitcoin Chart Demo](demo.gif)  
-_(Replace with your demo link or gif)_
+![Screenshot 2024-10-04 215311](https://github.com/user-attachments/assets/cbda017d-88b9-48ea-bb23-fab2b95608cf)
+
 
 ## 🛠 Installation
 
