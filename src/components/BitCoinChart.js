@@ -27,6 +27,7 @@ export default function BitCoinChart() {
   const [loading, setLoading] = useState(true);
   const [summaryData, setSummaryData] = useState({});
   const [statisticsData, setStatisticsData] = useState({});
+  const [analysisData, setAnalysisData] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,12 +56,33 @@ export default function BitCoinChart() {
         });
 
         // Mockup statistics data
+        const highestPrice = Math.max(...prices.map((p) => p.value));
+        const lowestPrice = Math.min(...prices.map((p) => p.value));
+        const averagePrice = (
+          prices.reduce((acc, p) => acc + p.value, 0) / prices.length
+        ).toFixed(2);
+
         setStatisticsData({
-          highestPrice: Math.max(...prices.map((p) => p.value)),
-          lowestPrice: Math.min(...prices.map((p) => p.value)),
-          averagePrice: (
-            prices.reduce((acc, p) => acc + p.value, 0) / prices.length
-          ).toFixed(2),
+          highestPrice,
+          lowestPrice,
+          averagePrice,
+        });
+
+        // Analysis Metrics
+        const priceVolatility = (
+          (highestPrice - lowestPrice) / lowestPrice
+        ).toFixed(2);
+
+        // Simple Moving Average (SMA) for the last 5 prices
+        const smaPeriod = 5;
+        const sma = prices
+          .slice(-smaPeriod)
+          .reduce((acc, p) => acc + p.value, 0)
+          .toFixed(2);
+
+        setAnalysisData({
+          priceVolatility: priceVolatility * 100, // Convert to percentage
+          sma,
         });
       } catch (error) {
         console.error("Error fetching chart or summary data", error);
@@ -68,7 +90,7 @@ export default function BitCoinChart() {
       setLoading(false);
     };
 
-    if (activeTab === "Chart" || activeTab === "Summary" || activeTab === "Statistics") {
+    if (activeTab === "Chart" || activeTab === "Summary" || activeTab === "Statistics" || activeTab === "Analysis") {
       fetchData();
     }
   }, [activeTab, activeButton]);
@@ -139,7 +161,24 @@ export default function BitCoinChart() {
           </div>
         );
       case "Analysis":
-        return <p>Analysis Content Here</p>;
+        return (
+          <div className="analysis-container">
+            <h2>Bitcoin Analysis</h2>
+            {loading ? (
+              <p>Loading analysis...</p>
+            ) : (
+              <div>
+                <p>
+                  <strong>Price Volatility: </strong>
+                  {analysisData.priceVolatility}%
+                </p>
+                <p>
+                  <strong>Simple Moving Average (last 5 prices): </strong>${analysisData.sma}
+                </p>
+              </div>
+            )}
+          </div>
+        );
       default:
         return null;
     }
