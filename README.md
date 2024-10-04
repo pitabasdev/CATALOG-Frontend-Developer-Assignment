@@ -14,7 +14,7 @@ This project is a **React.js** based application that displays **Bitcoin** price
 ![Screenshot 2024-10-04 215311](https://github.com/user-attachments/assets/cbda017d-88b9-48ea-bb23-fab2b95608cf)
 
 ## 🎥 Demo
-[Live Demo](https://bitcoin-chart-dashboard.netlify.app/)
+[Live Demo](https://catalog-frontend-developer-assignment.onrender.com/)
 
 ## 🛠 Installation
 
