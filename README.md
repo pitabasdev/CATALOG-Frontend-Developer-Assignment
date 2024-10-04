@@ -9,10 +9,12 @@ This project is a **React.js** based application that displays **Bitcoin** price
 - 📊 **Data Summary**: Get a quick overview of the latest Bitcoin price and 24-hour percentage change.
 - 🔍 **Additional Insights**: Placeholder sections for future statistics and analysis.
 
-## 🎥 Demo
+## 🎥 Screenshots
 
 ![Screenshot 2024-10-04 215311](https://github.com/user-attachments/assets/cbda017d-88b9-48ea-bb23-fab2b95608cf)
 
+## 🎥 Demo
+[Live Demo](https://bitcoin-chart-dashboard.netlify.app/)
 
 ## 🛠 Installation
 
