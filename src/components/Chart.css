@@ -1,0 +1,16 @@
+
+@media (max-width: 768px) {
+    .tab-buttons {
+      margin-left: 10px; 
+    }
+  
+    .tab-buttons .btn {
+      font-size: 80px; 
+    }
+  }
+  
+  .tab-buttons .btn {
+    font-size: 16px; 
+    padding: 0.5rem 1rem;
+  }
+  

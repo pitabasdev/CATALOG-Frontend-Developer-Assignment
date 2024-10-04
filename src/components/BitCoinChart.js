@@ -9,8 +9,9 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import FullscreenIcon from "@mui/icons-material/Fullscreen";
-import CompareIcon from "@mui/icons-material/Compare";
+// import FullscreenIcon from "@mui/icons-material/Fullscreen";
+// import CompareIcon from "@mui/icons-material/Compare";
+import "./ButtonGroup"
 
 export default function BitCoinChart() {
   const [activeTab, setActiveTab] = useState("Chart"); // Tracks the active tab
@@ -18,7 +19,6 @@ export default function BitCoinChart() {
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch data from API (for Chart tab)
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -43,9 +43,8 @@ export default function BitCoinChart() {
     if (activeTab === "Chart") {
       fetchData();
     }
-  }, [activeTab]); // Fetch data only when the "Chart" tab is active
+  }, [activeTab]);
 
-  // Render the chart or alternative content based on the active tab
   const renderContent = () => {
     switch (activeTab) {
       case "Chart":
@@ -72,9 +71,9 @@ export default function BitCoinChart() {
           </div>
         );
       case "Statistics":
-        return <p>Statistics Content Here</p>; // You can replace this with real stats or graph
+        return <p>Statistics Content Here</p>;
       case "Analysis":
-        return <p>Analysis Content Here</p>; // You can add your analysis data or charts here
+        return <p>Analysis Content Here</p>;
       default:
         return null;
     }
@@ -123,7 +122,7 @@ export default function BitCoinChart() {
 
           <Row className="mb-2">
             <Col md={5}>
-              <ButtonGroup className="w-100">
+              <ButtonGroup className="w-100 tab-buttons">
                 {tabs.map((tab) => (
                   <Button
                     key={tab}
@@ -159,7 +158,7 @@ export default function BitCoinChart() {
             </Col>
           </Row>
 
-          <Row className="ml-5 mt-4">
+          <Row className="ml-5 mt-4 mb-2">
             <Col md={10} className="text-center">
               <ButtonGroup>
                 <Button
@@ -222,19 +221,6 @@ export default function BitCoinChart() {
               style={{ backgroundColor: "#f8f9fa" }}
             >
               {renderContent()}
-            </Col>
-          </Row>
-
-          <Row className="justify-content-between mt-4">
-            <Col className="text-left">
-              <h5 className="font-weight-bold" style={{ color: "#1e1e1e" }}>
-                $64,850.35
-              </h5>
-            </Col>
-            <Col className="text-right">
-              <h5 className="font-weight-bold" style={{ color: "#1e1e1e" }}>
-                $63,179.71
-              </h5>
             </Col>
           </Row>
         </Container>
